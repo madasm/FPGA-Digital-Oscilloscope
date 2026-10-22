@@ -2,18 +2,18 @@
 
 A 12-bit digital storage oscilloscope implemented on the Digilent Basys 3 (Artix-7 FPGA). The system captures analog signals using the onboard XADC, stores them in Block RAM, and streams the data over UART to a Python-based PC application for real-time waveform visualization.
 
-## 🚀 Features
+##  Features
 *   **12-bit Resolution:** Utilizes the built-in Xilinx XADC.
 *   **640-Sample Buffer:** Captures 640 samples per frame in on-chip Block RAM (BRAM).
 *   **Hardware Triggering:** Rising-edge trigger logic with an adjustable threshold (controlled via onboard DIP switches SW8–SW15).
 *   **High-Speed UART:** Streams data to the PC at 921,600 baud.
 *   **Real-Time GUI:** Python + PyQtGraph viewer with a scope-style graticule and live measurements (Vpp, Vmax, Vmin, Vavg, Vrms, Frequency).
 
-## 🛠️ Architecture
+## Architecture
 The signal flows through the following pipeline:
 `Analog Input -> Voltage Divider -> XADC -> Trigger FSM -> BRAM -> Readout FSM -> UART -> Python GUI`
 
-## 📂 Repository Structure
+##  Repository Structure
 *   `rtl/` - Verilog source files for the FPGA logic.
 *   `constraints/` - XDC file for Basys 3 pin mapping.
 *   `sim/` - Vivado behavioral simulation testbench (`tb_scope.v`).
@@ -25,14 +25,14 @@ The signal flows through the following pipeline:
 *   Breadboard & Jumper Wires
 *   **10kΩ and 1kΩ Resistors** (For the voltage divider)
 
-> ⚠️ **CRITICAL WARNING:** The XADC has a maximum input limit of **1V**. Feeding a standard function generator (which outputs 4Vpp to 10Vpp) directly into the board will permanently damage the FPGA. A 10kΩ + 1kΩ voltage divider (÷11 attenuation) is strictly required to scale the signal down to a safe 0–0.36V range.
+> **CRITICAL WARNING:** The XADC has a maximum input limit of **1V**. Feeding a standard function generator (which outputs 4Vpp to 10Vpp) directly into the board will permanently damage the FPGA. A 10kΩ + 1kΩ voltage divider (÷11 attenuation) is strictly required to scale the signal down to a safe 0–0.36V range.
 
 ## 💻 Software Requirements
 *   Xilinx Vivado (Tested on 2018.2)
 *   Python 3.x
 *   Python Libraries: `pyserial`, `numpy`, `pyqtgraph`, `PyQt5`
 
-## 🏃‍♂️ How to Run
+##  How to Run
 
 ### 1. FPGA Setup
 1. Open Vivado and create a new RTL project for the Basys 3.
@@ -53,3 +53,21 @@ Connect the function generator to the JXADC header on the Basys 3 through the vo
 2. Install dependencies:
    ```bash
    pip install pyserial numpy pyqtgraph PyQt5
+   Results
+Vivado Simulation
+The pink trace is the captured data in BRAM; the green trace is the input sine wave. Both match perfectly.
+<img width="1354" height="707" alt="modeetsine" src="https://github.com/user-attachments/assets/33713137-bebc-430e-93b7-549d1ec19b57" />
+
+
+Hardware Output
+Live waveform streaming over UART to the PyQtGraph interface.
+<img width="4080" height="3072" alt="56928" src="https://github.com/user-attachments/assets/3a327a30-ad0e-4119-8727-c84d0e25df76" />
+<img width="3072" height="4080" alt="56934" src="https://github.com/user-attachments/assets/4278f900-6ae2-4569-8ea3-6020c70e3d6c" />
+
+
+Known Limitations
+Noise: The hardware waveform is noisier than the simulation due to breadboard parasitics. Future iterations will include an op-amp buffer and an RC anti-aliasing filter.
+
+Sample Rate: The Python GUI assumes a ~96 kSPS XADC sample rate for frequency calculations. Future work involves precisely measuring the DRP conversion rate.
+
+
