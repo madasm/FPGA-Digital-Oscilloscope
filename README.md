@@ -19,7 +19,7 @@ The signal flows through the following pipeline:
 *   `sim/` - Vivado behavioral simulation testbench (`tb_scope.v`).
 *   `python/` - PC-side real-time visualization script (`scope.py`).
 
-## 📋 Hardware Requirements
+##  Hardware Requirements
 *   Digilent Basys 3 (Artix-7 XC7A35T)
 *   Function Generator
 *   Breadboard & Jumper Wires
@@ -27,7 +27,7 @@ The signal flows through the following pipeline:
 
 > **CRITICAL WARNING:** The XADC has a maximum input limit of **1V**. Feeding a standard function generator (which outputs 4Vpp to 10Vpp) directly into the board will permanently damage the FPGA. A 10kΩ + 1kΩ voltage divider (÷11 attenuation) is strictly required to scale the signal down to a safe 0–0.36V range.
 
-## 💻 Software Requirements
+## Software Requirements
 *   Xilinx Vivado (Tested on 2018.2)
 *   Python 3.x
 *   Python Libraries: `pyserial`, `numpy`, `pyqtgraph`, `PyQt5`
